@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include "powerplugconnector.h"
 
 #define PAGE_SIZE (4*1024)
 #define BLOCK_SIZE (4*1024)
@@ -18,6 +18,6 @@ volatile unsigned* gpio;
 
 int main (int argc, char* argv[])
 { 
-	printf("lightning bolt reporting for duty :)\n");
+	PowerPlugConnector aPowerPlugConnector;
 	return 0;
 }
