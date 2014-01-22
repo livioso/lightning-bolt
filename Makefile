@@ -1,7 +1,7 @@
-default: *.cc 
+default: *.cc *.h
 	mkdir -p bin
 
-	clang++ -Werror -o bin/lightning-bolt lightning-bolt.cc
+	clang++ -Werror -std=c++1y -o bin/lightning-bolt powerplugconnector.cc lightning-bolt.cc
 	./bin/lightning-bolt
 
-	g++ -Werror -o bin/lightning-bolt-gcc lightning-bolt.cc
+	g++ -Werror -std=c++1y -o bin/lightning-bolt-gcc powerplugconnector.cc lightning-bolt.cc
