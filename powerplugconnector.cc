@@ -14,15 +14,11 @@ PowerPlugConnector::PowerPlugConnector ()
 // as it's called from within the constructor
 void PowerPlugConnector::setupPowerPlugs ()
 {
-	mPowerPlugsCollection.insert(std::make_pair(ePowerPlugOne, 
-		std::string("00001110111011101110111011101110111") + 
-					"01000111010001110111010001110111010" +
-					"00100010001000111011101110111010011"));
+	mPowerPlugsCollection.insert(std::make_pair(ePowerPlugOne,
+		"0000111011101110111011101110111011101000111010001110111010001110111010"));
 
 	mPowerPlugsCollection.insert(std::make_pair(ePowerPlugTwo, 
-		std::string("00001110111011101110111011101110111") + 
-					"01000111010001110111010001110111010" +
-					"00100010001000111011101110111010000"));
+		"0000111011101110111011101110111011001000111010001110111010001110111010"));
 }
 
 void PowerPlugConnector::turnPowerPlugOn (EPowerPlugSerialnumber id)
@@ -31,7 +27,7 @@ void PowerPlugConnector::turnPowerPlugOn (EPowerPlugSerialnumber id)
 
 	if(mPowerPlugsCollection.end() != finding) {
 		std::cout << "Turning power plug with ID " << finding->first << 
-			" on with corresponding bit sequence " << finding->second << std::endl; 
+		" on with corresponding bit sequence " << finding->second << std::endl; 
 	}
 }
 
@@ -41,6 +37,6 @@ void PowerPlugConnector::turnPowerPlugOff (EPowerPlugSerialnumber id)
 
 	if(mPowerPlugsCollection.end() != finding) {
 		std::cout << "Turning power plug with ID " << finding->first << 
-			" off with corresponding bit sequence " << finding->second << std::endl; 
+		" off with corresponding bit sequence " << finding->second << std::endl; 
 	}
 }
