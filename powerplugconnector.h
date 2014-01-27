@@ -31,10 +31,26 @@ class PowerPlugConnector {
 			ePowerPlugTwo = 424110073
 		};
 
+		/**	/dev/mem file descriptor assigned when
+			setting up memory access and expected to
+			be released during deconstruction phase */
+		unsigned int mFileDescriptorMemory;
+
+		/** Allocated memory for GPIO memory access */
+		unsigned char* mGPIOMemory; 
+
+		/** Corresponding mapped memory */
+		unsigned char* mGPIOMemoryMapped; 
+
+		/** Collection of <SerialNumber and corresponding bit sequences 
+			to be sent to enable or disable the power plug device. 
+			Note: As of now it looks like this will be the same for enable and disabling. */
 		std::map< EPowerPlugSerialnumber, std::string > mPowerPlugsCollection;
 
 	public:
 			explicit PowerPlugConnector ();
+			void setupMemoryAccess ();
+			void tearDownMemoryAccess ();
 			void setupPowerPlugs ();
 			void turnPowerPlugOn (EPowerPlugSerialnumber id);
 			void turnPowerPlugOff (EPowerPlugSerialnumber id);

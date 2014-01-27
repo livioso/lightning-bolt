@@ -1,13 +1,30 @@
 #include "powerplugconnector.h"
 #include <iostream>
 #include <utility>
+#include <fcntl.h>
 
-PowerPlugConnector::PowerPlugConnector ()
+PowerPlugConnector::PowerPlugConnector () 
+	:	mFileDescriptorMemory(0),
+		mGPIOMemory(NULL),
+		mGPIOMemoryMapped(NULL)
 {
 	setupPowerPlugs();
-
 	turnPowerPlugOn(ePowerPlugOne);
 	turnPowerPlugOn(ePowerPlugTwo);
+}
+
+void PowerPlugConnector::setupMemoryAccess ()
+{
+	const unsigned int kBytesToBeAllocated =
+		GPIO.kBlockSize + (GPIO.kPageSize - 1); 
+
+	mFileDescriptorMemory = open("/dev/mem", O_RDWR|O_SYNC);
+	mGPIOMemory = (unsigned char*) malloc(kBytesToBeAllocated);
+}
+
+void PowerPlugConnector::tearDownMemoryAccess ()
+{
+
 }
 
 // make sure that one is not virtual 
