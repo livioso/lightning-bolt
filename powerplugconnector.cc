@@ -3,6 +3,8 @@
 #include <utility>
 #include <fcntl.h>
 #include <unistd.h>
+#include <sys/mman.h>
+#include <stdint.h>
 
 PowerPlugConnector::PowerPlugConnector ()
 	:	mFileDescriptorMemory(0),
@@ -26,6 +28,30 @@ void PowerPlugConnector::setupMemoryAccess ()
 
 	mFileDescriptorMemory = open("/dev/mem", O_RDWR|O_SYNC);
 	mGPIOMemory = (unsigned char*) malloc(kBytesToBeAllocated);
+
+	if(0 == mFileDescriptorMemory || NULL == mGPIOMemory)
+	{
+		std::cout << "Memory setup failed. Can not do anything." << std::endl;
+		exit(-1);
+	}
+
+	// make sure pointer is on boundary -> no offset
+	ptrdiff_t kMemoryBoundryOffsetToPageSize = 
+		(intptr_t) mGPIOMemory % GPIO.kPageSize;
+	if(0 != kMemoryBoundryOffsetToPageSize)
+	{
+		mGPIOMemory += GPIO.kPageSize - kMemoryBoundryOffsetToPageSize;
+	}
+
+	// map the memory now
+	mGPIOMemoryMapped = (unsigned char*) mmap(
+		(caddr_t) mGPIOMemory,
+		GPIO.kBlockSize,
+		PROT_READ|PROT_WRITE,
+		MAP_SHARED|MAP_FIXED,
+		mFileDescriptorMemory,
+		GPIO.kGPIOControllerBase);
+
 }
 
 void PowerPlugConnector::tearDownMemoryAccess ()
