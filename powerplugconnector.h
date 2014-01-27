@@ -49,6 +49,7 @@ class PowerPlugConnector {
 
 	public:
 			explicit PowerPlugConnector ();
+			~PowerPlugConnector ();
 			void setupMemoryAccess ();
 			void tearDownMemoryAccess ();
 			void setupPowerPlugs ();

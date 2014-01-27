@@ -2,8 +2,9 @@
 #include <iostream>
 #include <utility>
 #include <fcntl.h>
+#include <unistd.h>
 
-PowerPlugConnector::PowerPlugConnector () 
+PowerPlugConnector::PowerPlugConnector ()
 	:	mFileDescriptorMemory(0),
 		mGPIOMemory(NULL),
 		mGPIOMemoryMapped(NULL)
@@ -11,6 +12,11 @@ PowerPlugConnector::PowerPlugConnector ()
 	setupPowerPlugs();
 	turnPowerPlugOn(ePowerPlugOne);
 	turnPowerPlugOn(ePowerPlugTwo);
+}
+
+PowerPlugConnector::~PowerPlugConnector ()
+{
+	tearDownMemoryAccess();
 }
 
 void PowerPlugConnector::setupMemoryAccess ()
@@ -24,7 +30,11 @@ void PowerPlugConnector::setupMemoryAccess ()
 
 void PowerPlugConnector::tearDownMemoryAccess ()
 {
+	close(mFileDescriptorMemory);
+	mFileDescriptorMemory = 0; 
 
+	free(mGPIOMemory);
+	mGPIOMemory = NULL;
 }
 
 // make sure that one is not virtual 
